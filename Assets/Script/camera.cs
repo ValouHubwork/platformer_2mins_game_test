@@ -16,7 +16,7 @@ public class Camera : MonoBehaviour
     {
         if (gameObject.CompareTag("Player"))
         {
-            position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2, -10);
+            position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1, -10);
             transform.position = Vector3.Lerp(transform.position, position, Time.deltaTime * 3);
         }
     }

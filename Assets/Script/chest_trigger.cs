@@ -1,13 +1,15 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class ChestTrigger : MonoBehaviour
 {
     public TMP_Text messageText;
-    public string message = "Appuie sur E pour ouvrir le coffre !";
-    private bool playerNear = false;
+    public string message;
+    private bool playerNear;
     public Animator animator;
     public Sprite openedSprite;
+    public int timer_second;
 
     void Start()
     {
@@ -16,10 +18,12 @@ public class ChestTrigger : MonoBehaviour
 
     void Update()
     {
-        if (playerNear && Input.GetKeyDown(KeyCode.E))
+        if (playerNear && Input.GetKey(KeyCode.E))
         {
             animator.SetTrigger("Open");
-            messageText.enabled = false; // cache le message une fois ouvert
+            messageText.text = message;
+            StartCoroutine(print_message(timer_second));
+            GetComponent<SpriteRenderer>().sprite = openedSprite;
         }
         else
         {
@@ -31,10 +35,7 @@ public class ChestTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            messageText.text = message;
-            messageText.enabled = true;
             playerNear = true;
-            GetComponent<SpriteRenderer> ().sprite = openedSprite;
         }
     }
 
@@ -42,8 +43,14 @@ public class ChestTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            messageText.enabled = false;
             playerNear = false;
         }
+    }
+    
+    private IEnumerator print_message(int timer)
+    {
+        messageText.enabled = true;
+        yield return new WaitForSeconds(timer);
+        messageText.enabled = false;
     }
 }
